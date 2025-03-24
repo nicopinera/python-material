@@ -2,13 +2,24 @@ import pygame
 import constantes
 from personaje import Personajes
 
-jugador = Personajes(50, 50)
-
 pygame.init()  # inicializando la libreria
-
 # creando ventana
 ventana = pygame.display.set_mode((constantes.ANCHO, constantes.ALTO))
 pygame.display.set_caption("Mi primer juego")  # nombre ventana
+
+def escalar_imagen(imagen, escala):
+    ancho = imagen.get_width()
+    alto = imagen.get_height()
+    nueva_imagen = pygame.transform.scale(imagen, (ancho*escala,alto*escala))
+    return nueva_imagen
+
+animaciones = []
+for i in range(7):
+    img = pygame.image.load(f"aset//Player0{i+1}.png")
+    img = escalar_imagen(img,constantes.ESCALA_PERSONAJE)
+    animaciones.append(img)
+
+jugador = Personajes(50, 50,animaciones)
 
 #definiendo variables de movimiento del jugador
 mover_arriba = False
@@ -43,7 +54,7 @@ while run:
 
     #mover jugador
     jugador.movimiento(delta_x,delta_y)
-
+    jugador.actualizar()
     jugador.dibujar(ventana)
 
     for eventos in pygame.event.get():
