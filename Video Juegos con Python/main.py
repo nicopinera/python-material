@@ -1,25 +1,36 @@
 import pygame
 import constantes
 from personaje import Personajes
+from weapon import Weapon
 
 pygame.init()  # inicializando la libreria
 # creando ventana
 ventana = pygame.display.set_mode((constantes.ANCHO, constantes.ALTO))
 pygame.display.set_caption("Mi primer juego")  # nombre ventana
 
+#FUNCION PARA ESCALAR IMAGENES
 def escalar_imagen(imagen, escala):
     ancho = imagen.get_width()
     alto = imagen.get_height()
     nueva_imagen = pygame.transform.scale(imagen, (ancho*escala,alto*escala))
     return nueva_imagen
 
+#importar imagenes del personaje
 animaciones = []
 for i in range(7):
     img = pygame.image.load(f"aset//Player0{i+1}.png")
     img = escalar_imagen(img,constantes.ESCALA_PERSONAJE)
     animaciones.append(img)
 
+#importar imagen del arma
+imagen_pistola = pygame.image.load("aset//armas//gun.png")
+imagen_pistola = escalar_imagen(imagen_pistola, constantes.ESCALA_ARMA)
+
+#crear un jugador de la clase personaje
 jugador = Personajes(50, 50,animaciones)
+
+#crear un arma de la clase weapon
+arma = Weapon(imagen_pistola)
 
 #definiendo variables de movimiento del jugador
 mover_arriba = False
@@ -34,7 +45,7 @@ run = True
 
 while run:
     
-    #DEFINIR LOS FPS
+    #DEFINIR LOS FPS: MAX 60 
     reloj.tick(constantes.FPS)
 
     ventana.fill(constantes.COLOR_BG) #color de fondo, para actualizarlo
@@ -52,10 +63,20 @@ while run:
     if mover_abajo == True:
         delta_y = constantes.VELOCIDAD
 
-    #mover jugador
+    #mover y dibujar jugador
     jugador.movimiento(delta_x,delta_y)
+
+    #Actualiza el estado del jugador
     jugador.actualizar()
+
+    #Actualiza el estado del arma
+    arma.actualizar_arma(jugador)
+
+    #Dibuja al jugador
     jugador.dibujar(ventana)
+
+    #Dibujar Arma
+    arma.dibujar(ventana)
 
     for eventos in pygame.event.get():
           # lista de eventos que pueden o van a ocurrir dentro del juego
