@@ -1,36 +1,43 @@
+#Librerias importadas
 import pygame
 import constantes
 from personaje import Personajes
 from weapon import Weapon
+import funciones_extra as fx
 
-pygame.init()  # inicializando la libreria
+# inicializando la libreria
+pygame.init()
+
 # creando ventana
 ventana = pygame.display.set_mode((constantes.ANCHO, constantes.ALTO))
-pygame.display.set_caption("Mi primer juego")  # nombre ventana
 
-#FUNCION PARA ESCALAR IMAGENES
-def escalar_imagen(imagen, escala):
-    ancho = imagen.get_width()
-    alto = imagen.get_height()
-    nueva_imagen = pygame.transform.scale(imagen, (ancho*escala,alto*escala))
-    return nueva_imagen
+#Colocando titulo a la ventana
+pygame.display.set_caption("Mi primer juego")
 
-#importar imagenes del personaje
+
+#importar imagenes del personaje para hacer la animacion
 animaciones = []
 for i in range(7):
     img = pygame.image.load(f"aset//Player0{i+1}.png")
-    img = escalar_imagen(img,constantes.ESCALA_PERSONAJE)
+    img = fx.escalar_imagen(img,constantes.ESCALA_PERSONAJE)
     animaciones.append(img)
 
 #importar imagen del arma
 imagen_pistola = pygame.image.load("aset//armas//gun.png")
-imagen_pistola = escalar_imagen(imagen_pistola, constantes.ESCALA_ARMA)
+imagen_pistola = fx.escalar_imagen(imagen_pistola, constantes.ESCALA_ARMA)
+
+#Importar imagen de balas
+imagen_balas = pygame.image.load("aset//armas//bala.png")
+imagen_balas = fx.escalar_imagen(imagen_balas, constantes.ESCALA_BALA)
 
 #crear un jugador de la clase personaje
 jugador = Personajes(50, 50,animaciones)
 
 #crear un arma de la clase weapon
-arma = Weapon(imagen_pistola)
+arma = Weapon(imagen_pistola,imagen_balas)
+
+#Creando un grupo de sprites
+grupo_balas = pygame.sprite.Group()
 
 #definiendo variables de movimiento del jugador
 mover_arriba = False
@@ -38,17 +45,18 @@ mover_abajo = False
 mover_derecha = False
 mover_izquierda = False
 
-reloj = pygame.time.Clock() # permite controlar los frames por segundo
+# permite controlar los frames por segundo
+reloj = pygame.time.Clock()
 
 # Para que se cierre cuando cerramos la ventana
 run = True
-
 while run:
     
     #DEFINIR LOS FPS: MAX 60 
     reloj.tick(constantes.FPS)
 
-    ventana.fill(constantes.COLOR_BG) #color de fondo, para actualizarlo
+    #color de fondo, para actualizarlo
+    ventana.fill(constantes.COLOR_BG) 
     
     #caclular el movimiento del jugador
     delta_x = 0
@@ -70,7 +78,9 @@ while run:
     jugador.actualizar()
 
     #Actualiza el estado del arma
-    arma.actualizar_arma(jugador)
+    bala = arma.actualizar_arma(jugador)
+    if bala:
+        grupo_balas.add(bala)
 
     #Dibuja al jugador
     jugador.dibujar(ventana)
@@ -78,10 +88,15 @@ while run:
     #Dibujar Arma
     arma.dibujar(ventana)
 
-    for eventos in pygame.event.get():
-          # lista de eventos que pueden o van a ocurrir dentro del juego
+    #dibujando balas
+    for bala in grupo_balas:
+        bala.dibujar(ventana)
 
-        if eventos.type == pygame.QUIT:  # evento de cerrar la ventana
+    # lista de eventos que pueden o van a ocurrir dentro del juego
+    for eventos in pygame.event.get():
+
+        # evento de cerrar la ventana
+        if eventos.type == pygame.QUIT:  
             run = False
 
         #mover al jugador cuando toco las teclas
@@ -106,6 +121,8 @@ while run:
             if eventos.key == pygame.K_s:
                 mover_abajo = False
 
-    pygame.display.update() #actualizar la pantalla para ver los cambios
+    #actualizar la pantalla para ver los cambios
+    pygame.display.update() 
 
-pygame.quit()  # saliendo de la libreria
+#saliendo de la libreria
+pygame.quit()  
