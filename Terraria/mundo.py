@@ -1,44 +1,52 @@
-import pygame # -> pip install pygame
+import pygame
 import random
-from perlin_noise import PerlinNoise  # Para Perlin Noise -> pip install Perlin-noise
+from perlin_noise import PerlinNoise
 import constantes as ct
 
-# 🌍 Clase Mundo
 class Mundo:
     def __init__(self):
-        self.noise = PerlinNoise(octaves=3, seed=random.randint(0, 1000))  # Más octavas = más detalle
-        self.mapa = self.generar_mundo()
+        self.seed = random.randint(0, 1000)
+        self.mapa = self._generar_terreno()
 
-    def generar_mundo(self):
-        mundo = [[0 for _ in range(ct.COLUMNAS)] for _ in range(ct.FILAS)]
+    def _generar_terreno(self):
+        """Genera un terreno básico con Perlin Noise optimizado"""
+        mapa = [[0 for _ in range(ct.COLUMNAS)] for _ in range(ct.FILAS)]
+        noise = PerlinNoise(octaves=3, seed=self.seed)
         altura_media = ct.FILAS // 2
-        escala = 15  # Aumentamos la escala para un terreno más suave
-
+        
         for col in range(ct.COLUMNAS):
-            altura = int(altura_media + self.noise(col / escala) * 10)  # Perlin Noise suavizado
+            # Altura con variación suave
+            altura = altura_media + int(noise(col/15) * 10)
             
             for fila in range(ct.FILAS):
                 if fila > altura:
                     if fila == altura + 1:
-                        mundo[fila][col] = 3  # Primera capa de pasto 🌿
-                    elif fila > altura + 3:
-                        mundo[fila][col] = 2  # Piedra en capas más profundas
+                        mapa[fila][col] = 3  # Pasto en superficie
+                    elif fila <= altura + 4:
+                        mapa[fila][col] = 1  # Capa de tierra
                     else:
-                        mundo[fila][col] = 1  # Tierra en la capa superior
-                else:
-                    mundo[fila][col] = 0  # Aire
-        return mundo
+                        mapa[fila][col] = 2  # Piedra bajo tierra
+        return mapa
 
     def dibujar(self, pantalla):
+        """Renderizado optimizado con pre-cálculo de rectángulos"""
         for fila in range(ct.FILAS):
             for col in range(ct.COLUMNAS):
-                color = ct.COLORES[self.mapa[fila][col]]
-                pygame.draw.rect(pantalla, color, (col * ct.TILE_SIZE, fila * ct.TILE_SIZE, ct.TILE_SIZE, ct.TILE_SIZE))
+                bloque = self.mapa[fila][col]
+                if bloque != 0:  # No dibujar aire
+                    rect = pygame.Rect(
+                        col * ct.TILE_SIZE,
+                        fila * ct.TILE_SIZE,
+                        ct.TILE_SIZE,
+                        ct.TILE_SIZE
+                    )
+                    pygame.draw.rect(pantalla, ct.COLORES[bloque], rect)
 
     def colisiona(self, x, y):
-        """Verifica si un punto (x, y) está tocando un bloque sólido"""
+        """Detección de colisiones optimizada"""
         col = int(x // ct.TILE_SIZE)
         fila = int(y // ct.TILE_SIZE)
-        if 0 <= col < ct.COLUMNAS and 0 <= fila < ct.FILAS:
-            return self.mapa[fila][col] in [1, 2, 3]  # Tierra, piedra o pasto
-        return False
+         # Verificar límites del mundo primero
+        if not (0 <= col < ct.COLUMNAS and 0 <= fila < ct.FILAS):
+            return False  # o True si quieres que los bordes sean sólidos
+        return self.mapa[fila][col] in ct.BLOQUES_SOLIDOS
