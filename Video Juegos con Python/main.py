@@ -14,13 +14,8 @@ ventana = pygame.display.set_mode((constantes.ANCHO, constantes.ALTO))
 #Colocando titulo a la ventana
 pygame.display.set_caption("Mi primer juego")
 
-
 #importar imagenes del personaje para hacer la animacion
-animaciones = []
-for i in range(7):
-    img = pygame.image.load(f"aset//Player0{i+1}.png")
-    img = fx.escalar_imagen(img,constantes.ESCALA_PERSONAJE)
-    animaciones.append(img)
+animaciones = fx.importar_imagenes_caminando()
 
 #importar imagen del arma
 imagen_pistola = pygame.image.load("aset//armas//gun.png")
@@ -81,6 +76,8 @@ while run:
     bala = arma.actualizar_arma(jugador)
     if bala:
         grupo_balas.add(bala)
+    for bala in grupo_balas:
+        bala.actualizar_balas()
 
     #Dibuja al jugador
     jugador.dibujar(ventana)
@@ -125,4 +122,4 @@ while run:
     pygame.display.update() 
 
 #saliendo de la libreria
-pygame.quit()  
+pygame.quit()

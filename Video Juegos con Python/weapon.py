@@ -31,9 +31,8 @@ class Weapon():
 
     #Funcion para actualizar el estado del arma
     def actualizar_arma(self, personaje):
-        #Dilay entre disparo
-        disparo_retraso = 500
-
+        
+        
         #bala del arma
         bala = None
 
@@ -69,7 +68,7 @@ class Weapon():
         #print(self.angulo) #10 y -15 <---> 160 y -160
 
         #detectar los click del mouse
-        if pygame.mouse.get_pressed()[0] and self.disparada == False and (pygame.time.get_ticks()-self.ultimo_disparo >= disparo_retraso): #0 izquierdo, 1 rueda, 2 derecho
+        if pygame.mouse.get_pressed()[0] and self.disparada == False and (pygame.time.get_ticks()-self.ultimo_disparo >= constantes.COOLDOWN_BALAS): #0 izquierdo, 1 rueda, 2 derecho
             bala = Balas(self.imagen_bala, self.forma.centerx, self.forma.centery, self.angulo)
             self.disparada = True
             self.ultimo_disparo = pygame.time.get_ticks()
@@ -105,6 +104,13 @@ class Balas(pygame.sprite.Sprite): #Hereda de Sprite y recibe todos sus metodos
         self.rectangulo = self.imagen_bala.get_rect()
         self.rectangulo.center = (x,y)
         
+        #Velocidad
+        self.delta_x = math.cos(math.radians(self.angulo)) * constantes.VELOCIDAD_BALA
+        self.delta_y = - math.sin(math.radians(self.angulo)) * constantes.VELOCIDAD_BALA
+        
+    def actualizar_balas(self):
+        self.rectangulo.x = self.rectangulo.x + self.delta_x
+        self.rectangulo.y = self.rectangulo.y + self.delta_y
 
     def dibujar(self, ventana):
         ventana.blit(self.imagen_bala, (self.rectangulo.centerx,
