@@ -42,4 +42,3 @@ class Mundo:
         if 0 <= col < ct.COLUMNAS and 0 <= fila < ct.FILAS:
             return self.mapa[fila][col] in [1, 2, 3]  # Tierra, piedra o pasto
         return False
-

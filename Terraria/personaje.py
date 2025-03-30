@@ -14,28 +14,24 @@ class Personaje:
     def mover(self, teclas, mundo):
         # Movimiento izquierda/derecha con detección de colisión
         nueva_x = self.x
-        if teclas[pygame.K_a]:
+        if teclas[pygame.K_a] or teclas[pygame.K_LEFT]:
             nueva_x -= 4
             if mundo.colisiona(nueva_x, self.y) or mundo.colisiona(nueva_x, self.y + self.alto - 1):
-                # 🟢 Si hay un bloque adelante, pero espacio arriba, subir 1 tile
-                if not mundo.colisiona(nueva_x, self.y - ct.TILE_SIZE):
-                    self.y -= ct.TILE_SIZE
-                else:
-                    nueva_x = self.x  # Cancelar movimiento si está bloqueado
-        elif teclas[pygame.K_d]:
+                nueva_x = self.x  # Cancelar movimiento si está bloqueado
+        elif teclas[pygame.K_d] or teclas[pygame.K_RIGHT]:
             nueva_x += 4
             if mundo.colisiona(nueva_x + self.ancho, self.y) or mundo.colisiona(nueva_x + self.ancho, self.y + self.alto - 1):
-                if not mundo.colisiona(nueva_x, self.y - ct.TILE_SIZE):
-                    self.y -= ct.TILE_SIZE
-                else:
-                    nueva_x = self.x  
+                nueva_x = self.x  
 
         # Aplicar nueva posición en X
         self.x = nueva_x
 
         # Aplicar gravedad
         if not self.en_el_suelo:
-            self.vel_y += 0.5  # Gravedad
+            self.vel_y += 0.5 # Gravedad
+        
+        if not self.en_el_suelo and (teclas[pygame.K_s] or teclas[pygame.K_DOWN]):
+            self.vel_y += 1.2 # Gravedad
 
         # Movimiento en Y
         nueva_y = self.y + self.vel_y
@@ -47,7 +43,7 @@ class Personaje:
             self.en_el_suelo = True
 
         # Salto con `ESPACIO`
-        if (teclas[pygame.K_w] or teclas[pygame.K_SPACE]) and self.en_el_suelo:
+        if (teclas[pygame.K_w] or teclas[pygame.K_SPACE] or teclas[pygame.K_UP]) and self.en_el_suelo:
             self.vel_y = -10  # Salto
 
     def dibujar(self, pantalla):
