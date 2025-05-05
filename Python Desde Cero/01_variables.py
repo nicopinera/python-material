@@ -43,3 +43,12 @@ nombre_usuario = input("Cual es el nombre de usuaro: ")
 contraseña_usuario = input("Ingrese la contraseña: ")
 print("Usuario:",nombre_usuario,"\n", "Contraseña: ", contraseña_usuario, "\n")
 
+# Asignacion multiple
+nombre, edad, atractivo = "Julian", 23, True
+a1 = a2 = a3 = a4 = 10
+
+## Convertir tipos de datos
+x = 1
+y = 2.0
+z = "3"
+print(str(x),int(y),float(z))

@@ -57,10 +57,26 @@ print(lenguaje_slice)
 lenguaje_invertido = lenguaje[::-1]
 print(lenguaje_invertido)
 
-#Funciones del sistema
-print(lenguaje.capitalize()) #primera letra en mayuscula
-print(lenguaje.upper()) #Todo en mayuscula 
-print(lenguaje.count("t")) #Cuenta las "t"
-print(lenguaje.isnumeric()) # Es un numero?
-print(lenguaje.lower()) #Todo minuscula
-print(lenguaje.upper().isupper()) #es mayuscula? 
+## Funciones del sistema
+#primera letra en mayuscula
+print(lenguaje.capitalize()) 
+
+#Todo en mayuscula 
+print(lenguaje.upper()) 
+
+#Cuenta las "t"
+print(lenguaje.count("t")) 
+
+# Es un numero?
+print(lenguaje.isnumeric())
+print(lenguaje.isdigit()) 
+print(lenguaje.isalpha())
+
+#Todo minuscula
+print(lenguaje.lower()) 
+
+#es mayuscula?
+print(lenguaje.upper().isupper())  
+
+# Devuelve el indice donde se encuentra esta letra
+print(lenguaje.find("P")) 

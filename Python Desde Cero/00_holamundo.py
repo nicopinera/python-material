@@ -27,4 +27,5 @@ print(type(1.5)) #Tipo 'Float'
 print(type(True)) #Tipo 'bool'
 print(type(1 + 1j)) #Tipo 'complex'
 
-#Datos compuestos
+## Input
+edad = int(input("edad? "))
