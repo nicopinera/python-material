@@ -61,13 +61,34 @@ muestra2 = 25000
 random.seed(20220512)
 
 # Variables
+mul_3 = mul_5 = no_mul_3y5 = num_mayor = mul_2_y_11 = 0
 
 
 for i in range(muestra2):
     num = random.randint(1,4500)
+    if num % 3 == 0:
+        mul_3 += 1
+    if num % 5 == 0 and num %3 != 0:
+        mul_5 += 1
+    if num % 5 != 0 and num %3 != 0:
+        no_mul_3y5 += 1
+    
+    aux = num
+    while aux >=10:
+        aux = aux // 10
+    if aux == 1 and num>num_mayor:
+        num_mayor = num
 
+    if num %2 == 0 and num %11 == 0:
+        mul_2_y_11 += 1
+    
+print(f"Cantidad de Multiplos de 3: {mul_3}")
+print(f"Cantidad de Multiplos de 5: {mul_5}")
+print(f"Cantidad no multiplos de 5 y 3: {no_mul_3y5}")
+print(f"Numero mayor cuyo primer digito es 1: {num_mayor}")
 
-
+por_par_11 =100 * (mul_2_y_11/muestra2)
+print(f"Porcentaje: {por_par_11}%")
 
 print("---"*10)
 print("Terminado")
