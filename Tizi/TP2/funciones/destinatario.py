@@ -6,7 +6,7 @@ def validar_destinatario(id_destinatario):
         id_destinatario (string): Id del destinatario
 
     Returns:
-        Booleano: Verdadero si la id de destinatario es correcta
+        Booleano: True si la id de destinatario es correcta, False si no lo es o tiene caracteres invalidos
     """
     if not id_destinatario:
         return False

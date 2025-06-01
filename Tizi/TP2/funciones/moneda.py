@@ -8,9 +8,8 @@ def validar_moneda(codigo_orden):
     Returns:
         String: Codigo de orden encontrado
     """
-
-    # Monedas aceptadas
-    monedas_validas = ["ARS", "USD", "EUR", "GBP", "JPY"]
+    
+    monedas_validas = ["ARS", "USD", "EUR", "GBP", "JPY"] # Monedas aceptadas
     moneda_encontrada = None
     contador = 0
 
