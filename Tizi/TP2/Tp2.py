@@ -1,6 +1,9 @@
 def validar_moneda(codigo_orden):
     monedas_validas = ['ARS', 'USD', 'EUR', 'GBP', 'JPY']
-    monedas_encontradas = [m for m in monedas_validas if m in codigo_orden]
+    for moneda in monedas_validas:
+        if moneda in codigo_orden:
+            monedas_encontradas = [moneda]
+#    monedas_encontradas = [m for m in monedas_validas if m in codigo_orden]
     
     if len(monedas_encontradas) == 1:
         return monedas_encontradas[0]
