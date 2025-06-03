@@ -14,11 +14,10 @@ def main():
     nom_primer_benef = ""
     cant_nom_primer_benef = 0
     total_ordenes = 0
-
+    archivo = "ordenes25.txt"
     try:
-        with open("ordenes25.txt", "r") as f:
-            # Ignorar la primera línea (timestamp)
-            next(f)
+        with open(archivo, "r") as f:
+            next(f) # Ignorar la primera línea (timestamp)
 
             for linea in f:
                 total_ordenes += 1
